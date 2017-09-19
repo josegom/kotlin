@@ -1,0 +1,62 @@
+buildscript {
+    ext.kotlin_version = '1.1.2'
+    repositories {
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.bmuschko:gradle-tomcat-plugin:2.3"
+    }
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'war'
+apply plugin: 'com.bmuschko.tomcat-base'
+apply plugin: 'com.bmuschko.tomcat'
+
+
+war.baseName = 'KotlinhelloWorldExample'
+project.webAppDirName = 'WebContent'
+
+repositories {
+    jcenter()
+    mavenLocal()
+    mavenCentral()
+    maven { url "https://maven.google.com" }
+}
+
+dependencies {
+    compile group: 'javax', name: 'javaee-api', version: '7.0'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    def fuelVersion = '1.10.0'
+    compile "com.github.kittinunf.fuel:fuel:${fuelVersion}" //for JVM
+    compile "com.github.kittinunf.fuel:fuel-android:${fuelVersion}" //for Android
+    compile "com.github.kittinunf.fuel:fuel-rxjava:${fuelVersion}" //for RxJava support
+    compile "com.github.kittinunf.fuel:fuel-livedata:${fuelVersion}" //for LiveData support
+    compile "com.github.kittinunf.fuel:fuel-gson:${fuelVersion}" //for Gson support
+
+    def tomcatVersion = '7.0.76'
+
+    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}",
+            "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
+}
+
+
+
+sourceSets {
+    main {
+        kotlin {
+            srcDir "src/main/kotlin"
+        }
+    }
+    test {
+        kotlin {
+            srcDir "test/main/kotlin"
+        }
+    }
+}
